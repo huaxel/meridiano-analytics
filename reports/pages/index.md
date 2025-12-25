@@ -97,13 +97,56 @@ group by category_normalized
 order by paid desc
 ```
 
-<BarChart
-    data={categories}
-    x=category_normalized
-    y=paid
-    swapXY=true
-    title="Distribución de Masa Salarial"
-    fmt=eur
-    colorPalette={['#ec0000', '#2b2b2b', '#444444', '#555555', '#666666', '#777777', '#888888', '#999999', '#aaaaaa', '#bbbbbb']}
-/>
+<script>
+    let donutData = [];
+    $: if (categories) {
+        donutData = categories.map(d => ({
+            value: d.paid,
+            name: d.category_normalized
+        }));
+    }
+</script>
+
+<div class="card p-4 h-96">
+    <h3 class="text-lg font-bold mb-2">Distribución de Masa Salarial</h3>
+    <ECharts config={{
+        tooltip: {
+            trigger: 'item',
+            formatter: '{b}: {c} ({d}%)' // Shows Name: Value (Percent%)
+        },
+        legend: {
+            top: '5%',
+            left: 'center'
+        },
+        series: [
+            {
+                name: 'Masa Salarial',
+                type: 'pie',
+                radius: ['40%', '70%'],
+                avoidLabelOverlap: false,
+                itemStyle: {
+                    borderRadius: 10,
+                    borderColor: '#fff',
+                    borderWidth: 2
+                },
+                label: {
+                    show: false,
+                    position: 'center'
+                },
+                emphasis: {
+                    label: {
+                        show: true,
+                        fontSize: '20',
+                        fontWeight: 'bold'
+                    }
+                },
+                labelLine: {
+                    show: false
+                },
+                data: donutData,
+                color: ['#ec0000', '#2b2b2b', '#444444', '#555555', '#666666', '#777777', '#888888', '#999999', '#aaaaaa', '#bbbbbb']
+            }
+        ]
+    }} />
+</div>
 
