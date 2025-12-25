@@ -32,7 +32,10 @@ jobs:
         run: cd reports && npm ci
 
       - name: Build
-        run: cd reports && npm run build
+        run: |
+          cd reports 
+          npm run sources
+          npm run build
         env:
           # Evidence automatically handles basePath for GH Pages if configured? 
           # Actually, usually safer to let standard build run, but SvelteKit might need BASE_PATH if not root.
