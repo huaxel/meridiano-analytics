@@ -152,4 +152,16 @@ order by median desc
   <Column id=median title="Mediana" fmt=eur />
   <Column id=q3 title="Q3 (75%)" fmt=eur />
   <Column id=max_val title="Máximo" fmt=eur />
+  <Column id=max_val title="Máximo" fmt=eur />
+</DataTable>
+
+## Explorador de Datos (Auditoría)
+
+Herramienta de búsqueda para identificar casos específicos (Outliers).
+
+<DataTable data={scatter_data} search=true sortable=true rows=10 download=true>
+  <Column id=employee_id title="ID Empleado" />
+  <Column id=subsidiary title="Filial" />
+  <Column id=job_level title="Nivel" />
+  <Column id=total_comp title="Retribución Total" fmt=eur />
 </DataTable>
