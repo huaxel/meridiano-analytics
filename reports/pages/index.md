@@ -2,6 +2,32 @@
 title: Panel de Control
 ---
 
+<div class="mb-4">
+    <Dropdown 
+        name=subsidiary 
+        data={subsidiaries} 
+        value=subsidiary_code 
+        title="Filtrar por Filial"
+        defaultValue="All"
+    >
+        <DropdownOption value="All" label="Todas las Filiales" />
+    </Dropdown>
+</div>
+
+```sql subsidiaries
+select distinct subsidiary_code from tia_elena.remuneration order by 1
+```
+
+```sql kpis
+select
+    sum(theoretical_eur) as total_demand,
+    sum(final_payout_eur) as total_paid,
+    1 - (sum(final_payout_eur) / sum(theoretical_eur)) as haircut,
+    count(*) as records
+from tia_elena.remuneration
+where (subsidiary_code = '${inputs.subsidiary.value}' or '${inputs.subsidiary.value}' = 'All')
+```
+
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10 mt-2">
   <div class="bg-red-50 p-6 rounded-xl border border-red-100 shadow-sm flex items-center justify-between group hover:border-red-200 transition-all">
     <div>
@@ -25,15 +51,6 @@ title: Panel de Control
     </div>
   </div>
 </div>
-
-```sql kpis
-select
-    sum(theoretical_eur) as total_demand,
-    sum(final_payout_eur) as total_paid,
-    1 - (sum(final_payout_eur) / sum(theoretical_eur)) as haircut,
-    count(*) as records
-from tia_elena.remuneration
-```
 
 <BigValue 
   data={kpis} 
@@ -73,6 +90,7 @@ select
     sum(final_payout_eur) as paid,
     demand - paid as gap
 from tia_elena.remuneration
+where (subsidiary_code = '${inputs.subsidiary.value}' or '${inputs.subsidiary.value}' = 'All')
 group by subsidiary_code
 order by gap desc
 limit 10
@@ -93,6 +111,7 @@ select
     sum(final_payout_eur) as paid
 from tia_elena.remuneration
 where category_normalized is not null
+  and (subsidiary_code = '${inputs.subsidiary.value}' or '${inputs.subsidiary.value}' = 'All')
 group by category_normalized
 order by paid desc
 ```
