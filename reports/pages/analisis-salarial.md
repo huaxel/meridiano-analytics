@@ -22,7 +22,6 @@ group by employee_id, job_level
 
 ```sql histogram_main
 select
-    job_level,
     floor(total_comp / 5000) * 5000 as bin_start,
     count(*) as frequency
 from ${employee_data}
@@ -35,7 +34,6 @@ order by bin_start
 
 ```sql histogram_top
 select
-    job_level,
     floor(total_comp / 50000) * 50000 as bin_start,
     count(*) as frequency
 from ${employee_data}
@@ -56,7 +54,6 @@ order by bin_start
         y=frequency
         title="Frecuencia por Nivel"
         yLog=true
-        type=grouped
         colorPalette={['#ec0000', '#2b2b2b', '#444444', '#555555', '#666666', '#777777', '#888888', '#999999', '#aaaaaa', '#bbbbbb', '#cccccc']}
     />
 </div>
@@ -70,7 +67,6 @@ order by bin_start
         y=frequency
         title="Frecuencia Alta Dirección"
         yLog=true
-        type=grouped
         colorPalette={['#ec0000', '#2b2b2b', '#444444', '#555555', '#666666', '#777777', '#888888', '#999999', '#aaaaaa', '#bbbbbb', '#cccccc']}
     />
 </div>
