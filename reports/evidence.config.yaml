@@ -1,0 +1,12 @@
+settings:
+  appearance:
+    theme: light
+    logo: /meridiano.png
+    logo_url: /meridiano.png
+    logoUrl: /meridiano.png
+    primary_color: "#EC0000"
+plugins:
+  datasources:
+    "@evidence-dev/duckdb": {}
+  components:
+    "@evidence-dev/core-components": {}

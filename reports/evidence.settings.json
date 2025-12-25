@@ -1,0 +1,14 @@
+{
+    "title": "Banco Meridiano Reporting Retribución Variable",
+    "theme": "light",
+    "logoUrl": "/meridiano.png",
+    "colors": {
+        "palette": [
+            "#EC0000",
+            "#555555",
+            "#A8A8A8",
+            "#D4D4D4",
+            "#000000"
+        ]
+    }
+}
