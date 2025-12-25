@@ -15,19 +15,7 @@ title: Panel de Control
 </div>
 
 ```sql subsidiaries
-select distinct subsidiary_code from tia_elena.remuneration order by 1
-```
-
-```sql kpi_base
--- Pre-aggregated base table to speed up filtering
-select 
-    subsidiary_code,
-    category_normalized,
-    sum(theoretical_eur) as theoretical,
-    sum(final_payout_eur) as paid,
-    count(*) as recs
-from tia_elena.remuneration
-group by 1, 2
+select distinct subsidiary_code from tia_elena.remuneration_summary where subsidiary_code != 'All' order by 1
 ```
 
 ```sql kpis
@@ -36,8 +24,10 @@ select
     sum(paid) as total_paid,
     1 - (sum(paid) / sum(theoretical)) as haircut,
     sum(recs) as records
-from ${kpi_base}
-where (subsidiary_code = '${inputs.subsidiary.value}' or '${inputs.subsidiary.value}' = 'All')
+from tia_elena.remuneration_summary
+where (subsidiary_code = '${inputs.subsidiary.value}' or (subsidiary_code = 'All' and '${inputs.subsidiary.value}' = 'All'))
+  and ('${inputs.subsidiary.value}' != 'All' OR subsidiary_code = 'All') 
+  -- Logic: If Dropdown=Specific, match Specific. If Dropdown=All, match the 'All' row we created.
 ```
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10 mt-2">
@@ -101,8 +91,9 @@ select
     sum(theoretical) as demand,
     sum(paid) as paid,
     demand - paid as gap
-from ${kpi_base}
-where (subsidiary_code = '${inputs.subsidiary.value}' or '${inputs.subsidiary.value}' = 'All')
+from tia_elena.remuneration_summary
+where subsidiary_code != 'All' 
+  and (subsidiary_code = '${inputs.subsidiary.value}' or '${inputs.subsidiary.value}' = 'All')
 group by subsidiary_code
 order by gap desc
 limit 10
@@ -121,9 +112,10 @@ limit 10
 select
     category_normalized,
     sum(paid) as paid
-from ${kpi_base}
+from tia_elena.remuneration_summary
 where category_normalized is not null
-  and (subsidiary_code = '${inputs.subsidiary.value}' or '${inputs.subsidiary.value}' = 'All')
+  and (subsidiary_code = '${inputs.subsidiary.value}' or (subsidiary_code = 'All' and '${inputs.subsidiary.value}' = 'All'))
+  and ('${inputs.subsidiary.value}' != 'All' OR subsidiary_code = 'All')
 group by category_normalized
 order by paid desc
 ```
