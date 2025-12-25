@@ -7,7 +7,8 @@
 </script>
 
 <svelte:head>
-    <link rel="icon" href="{base}/favicon.ico" />
+    <link rel="icon" href="{base}/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" href="{base}/icon.png" />
     <link rel="apple-touch-icon" href="{base}/apple-touch-icon.png" />
 </svelte:head>
 

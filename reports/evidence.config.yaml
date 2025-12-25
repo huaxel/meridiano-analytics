@@ -1,9 +1,8 @@
 settings:
   appearance:
     theme: light
-    logo: /meridiano.png
-    logo_url: /meridiano.png
-    logoUrl: /meridiano.png
+    logo: /meridiano.jpg
+    logoUrl: /meridiano.jpg
     primary_color: "#EC0000"
 plugins:
   datasources:
