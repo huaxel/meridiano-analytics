@@ -108,7 +108,7 @@ select
     subsidiary_code,
     sum(theoretical) as demand,
     sum(paid) as paid,
-    demand - paid as gap
+    sum(theoretical) - sum(paid) as gap
 from tia_elena.remuneration_summary
 where subsidiary_code != 'All' 
   and (subsidiary_code = '${inputs.subsidiary.value}' or '${inputs.subsidiary.value}' = 'All')

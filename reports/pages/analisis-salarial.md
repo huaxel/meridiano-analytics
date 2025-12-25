@@ -94,9 +94,9 @@ select
     END as level_code,
     sum(final_payout_eur) as total_comp,
     first(subsidiary_code) as subsidiary
-from tia_elena.remuneration
-where total_comp > 0
+from tia_elena.remuneration_lean
 group by employee_id, job_level
+having sum(final_payout_eur) > 0
 order by level_code
 ```
 
@@ -119,7 +119,7 @@ select
     employee_id,
     job_level,
     sum(final_payout_eur) as total_comp
-from tia_elena.remuneration
+from tia_elena.remuneration_lean
 group by employee_id, job_level
 order by total_comp desc
 limit 20
@@ -140,7 +140,7 @@ select
     quantile(final_payout_eur, 0.75) as q3,
     min(final_payout_eur) as min_val,
     max(final_payout_eur) as max_val -- Note: Evidence BoxPlot might need specific format, using table for detail
-from tia_elena.remuneration
+from tia_elena.remuneration_lean
 group by job_level
 order by median desc
 ```

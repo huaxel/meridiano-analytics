@@ -15,6 +15,7 @@ venv/
 *.csv
 *.parquet
 !reports/sources/**/*.parquet
+data/archive_csv/
 !reports/sources/**/*.csv
 
 # Evidence
