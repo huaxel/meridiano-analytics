@@ -1,98 +1,65 @@
-# tia-elena 🏦
+# Banco Meridiano Analytics 🦁
 
-Variable Remuneration Processing System for Global Banking.
+**Sistema de Análisis de Retribución Variable**
 
-A high-performance ETL system for processing variable remuneration data with realistic banking context, including regulatory compliance (CRD IV/V), multi-currency support, and professional visualization.
+Plataforma de inteligencia de negocio para el procesamiento y visualización de datos salariales en contexto bancario global. Transformado de ETL Python puro a un dashboard analítico moderno con **Evidence.dev**.
 
-## Features
+![Badge](https://img.shields.io/badge/Status-Deployed-success) ![Stack](https://img.shields.io/badge/Stack-Evidence%20%7C%20DuckDB%20%7C%20Polars-blue)
 
-- **High Performance**: Polars + Parquet = 0.13s for 320K+ rows
-- **Banking Context**: MRTs, deferred compensation, clawbacks, LTIP
-- **Global Support**: 20 subsidiaries, 14 currencies, garbage data simulation
-- **Validation**: Pydantic schemas with input validation
-- **Dashboard**: Streamlit C-Suite dashboard with regulatory KPIs
+## 🚀 Características Clave
 
-## Installation
+- **Modern Dashboard**: Construido con [Evidence.dev](https://evidence.dev/) (Markdown + SQL + Svelte).
+- **Interactive**: Filtros por filial, gráficos de correlación y KPIs reactivos pre-agregados.
+- **Branding corporativo**: Identidad visual "Red/Gray" de Banco Meridiano de Inversión.
+- **High Performance**:
+    - **Backend**: ETL en Python con Polars (0.13s para 300k registros).
+    - **Frontend**: DuckDB-WASM en navegador con pre-agregación para filtrado instantáneo.
+
+## 🛠️ Arquitectura
+
+1.  **ETL (Python)**: Genera datos sintéticos complejos (MRTs, diferidos, FX) y los exporta a Parquet.
+2.  **Modelado (DuckDB)**: Ingesta los archivos Parquet como fuente de datos.
+3.  **Visualización (Evidence)**:
+    - `index.md`: Panel Ejecutivo con filtros globales.
+    - `analisis-salarial.md`: Desglose detallado por niveles y distribuciones.
+
+## 📦 Instalación
+
+### Requisitos
+- Python 3.11+ (con `uv` recomendado)
+- Node.js 20+
+
+### Setup
 
 ```bash
-# Clone and install
-git clone <repo>
-cd tia-elena
+# 1. Instalar backend y dependencias
 uv sync
+pip install -e .
 
-# Or install in editable mode
-uv pip install -e .
-```
-
-## Usage
-
-### CLI Commands
-
-```bash
-# Generate synthetic data (190K employees, 320K records)
+# 2. Generar datos (Pipeline ETL)
 tia-elena generate
+tia-elena etl  # Crea los archivos Parquet en reports/sources/tia_elena/
 
-# Run ETL pipeline
-tia-elena etl
-
-# Launch dashboard
-tia-elena dashboard
+# 3. Instalar frontend
+cd reports
+npm install
 ```
 
-### As a Library
-
-```python
-from tia_elena import run_pipeline, settings
-
-# Run ETL
-result = run_pipeline()
-print(f"Processed {result.rows_processed} rows in {result.execution_time_seconds:.2f}s")
-
-# Custom paths
-from tia_elena.pipeline import ETLPipeline
-pipeline = ETLPipeline(input_path=Path("custom/input.parquet"))
-result = pipeline.run()
-```
-
-## Project Structure
-
-```
-src/tia_elena/
-├── config.py           # Pydantic Settings
-├── schemas.py          # Validation models
-├── validation.py       # Input validation
-├── loaders.py          # Data loaders (Protocol pattern)
-├── transformers.py     # Pure transformation functions
-├── calculators.py      # Business logic
-├── exporters.py        # Data exporters
-├── pipeline.py         # ETL orchestrator
-├── cli.py              # CLI entry points
-├── generators/         # Data generation
-│   ├── config.py       # Bank configuration
-│   ├── employees.py    # Employee generation
-│   ├── remuneration.py # Remuneration generation
-│   ├── garbage.py      # Data quality issues
-│   └── dimensions.py   # Dimension tables
-└── dashboard/          # Streamlit app
-    ├── theme.py        # Colors, CSS
-    ├── charts.py       # Chart factories
-    ├── data.py         # Data loading
-    └── app.py          # Main dashboard
-```
-
-## Architecture
-
-- **SOLID**: Single responsibility, Open/Closed with Protocols
-- **GoF Patterns**: Strategy (loaders/exporters), Factory, Pipeline
-- **GRASP**: Information Expert, Low Coupling, High Cohesion
-- **DRY**: Centralized config, reusable components
-
-## Testing
+## 🖥️ Ejecución Local
 
 ```bash
-pytest tests/ -v
+cd reports
+npm run dev
+# Dashboard disponible en http://localhost:3000/meridiano-analytics/
 ```
 
-## License
+## 🌐 Despliegue
 
-MIT
+Configurado automáticamente vía **GitHub Actions** hacia **GitHub Pages**.
+El flujo `deploy.yml`:
+1.  Instala dependencias.
+2.  Construye el sitio estático (`npm run build`).
+3.  Sube los artefactos a la rama `gh-pages`.
+
+---
+*Powered by Huaxel Data Team*
