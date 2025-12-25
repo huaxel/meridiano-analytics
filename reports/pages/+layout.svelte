@@ -7,5 +7,9 @@
 </script>
 
 <EvidenceDefaultLayout {data} logo="{base}/meridiano.jpg">
+    <svelte:head>
+        <link rel="icon" href="{base}/favicon.ico" />
+        <link rel="apple-touch-icon" href="{base}/apple-touch-icon.png" />
+    </svelte:head>
     <slot slot="content" />
 </EvidenceDefaultLayout>
