@@ -4,7 +4,7 @@ select
     sum(theoretical_eur) as theoretical,
     sum(final_payout_eur) as paid,
     count(*) as recs
-from remuneration
+from './sources/tia_elena/remuneration.parquet'
 group by 1, 2
 union all
 select 
@@ -13,5 +13,5 @@ select
     sum(theoretical_eur) as theoretical,
     sum(final_payout_eur) as paid,
     count(*) as recs
-from remuneration
+from './sources/tia_elena/remuneration.parquet'
 group by 1, 2
