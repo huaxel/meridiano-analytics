@@ -79,6 +79,24 @@ where (subsidiary_code = '${inputs.subsidiary.value}' or (subsidiary_code = 'All
   title="Registros Procesados" 
 />
 
+
+<Alert status=warning>
+  <div class="flex items-center gap-2">
+    <strong>Resumen Ejecutivo:</strong>
+    <span>
+      La filial con mayor desviación presupuestaria es 
+      <strong><Value data={impact} column=subsidiary_code row=0 /></strong>, 
+      con un déficit de 
+      <strong><Value data={impact} column=gap fmt=eur row=0 /></strong>.
+    </span>
+  </div>
+  <div class="mt-2 text-sm">
+    <a href="./analisis-salarial" class="text-red-700 hover:underline font-bold">
+       Ver Análisis Detallado por Nivel &rarr;
+    </a>
+  </div>
+</Alert>
+
 ---
 
 ## Impacto por Filial
