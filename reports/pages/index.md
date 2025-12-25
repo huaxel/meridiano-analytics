@@ -18,13 +18,25 @@ title: Panel de Control
 select distinct subsidiary_code from tia_elena.remuneration order by 1
 ```
 
+```sql kpi_base
+-- Pre-aggregated base table to speed up filtering
+select 
+    subsidiary_code,
+    category_normalized,
+    sum(theoretical_eur) as theoretical,
+    sum(final_payout_eur) as paid,
+    count(*) as recs
+from tia_elena.remuneration
+group by 1, 2
+```
+
 ```sql kpis
 select
-    sum(theoretical_eur) as total_demand,
-    sum(final_payout_eur) as total_paid,
-    1 - (sum(final_payout_eur) / sum(theoretical_eur)) as haircut,
-    count(*) as records
-from tia_elena.remuneration
+    sum(theoretical) as total_demand,
+    sum(paid) as total_paid,
+    1 - (sum(paid) / sum(theoretical)) as haircut,
+    sum(recs) as records
+from ${kpi_base}
 where (subsidiary_code = '${inputs.subsidiary.value}' or '${inputs.subsidiary.value}' = 'All')
 ```
 
@@ -86,10 +98,10 @@ Top 10 filiales con mayor brecha entre retribución teórica y real.
 ```sql impact
 select 
     subsidiary_code,
-    sum(theoretical_eur) as demand,
-    sum(final_payout_eur) as paid,
+    sum(theoretical) as demand,
+    sum(paid) as paid,
     demand - paid as gap
-from tia_elena.remuneration
+from ${kpi_base}
 where (subsidiary_code = '${inputs.subsidiary.value}' or '${inputs.subsidiary.value}' = 'All')
 group by subsidiary_code
 order by gap desc
@@ -108,8 +120,8 @@ limit 10
 ```sql categories
 select
     category_normalized,
-    sum(final_payout_eur) as paid
-from tia_elena.remuneration
+    sum(paid) as paid
+from ${kpi_base}
 where category_normalized is not null
   and (subsidiary_code = '${inputs.subsidiary.value}' or '${inputs.subsidiary.value}' = 'All')
 group by category_normalized
