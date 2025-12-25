@@ -7,9 +7,9 @@ title: Análisis Salarial
 
 Análisis estadístico (Histogramas y Box Plots) de los paquetes retributivos por nivel jerárquico.
 
-## Histograma Global
+## Distribución Salarial por Nivel
 
-Distribución de la retribución total (fija + variable procesada).
+Visualización de la distribución de retribución total por nivel jerárquico.
 
 ```sql employee_data
 select
@@ -20,54 +20,70 @@ from meridiano_analysis.remuneration_lean
 group by employee_id, job_level
 ```
 
-```sql histogram_main
+```sql boxplot_data
 select
-    floor(total_comp / 5000) * 5000 as bin_start,
-    count(*) as frequency
+    job_level as name,
+    min(total_comp) as min,
+    quantile(total_comp, 0.25) as q1,
+    quantile(total_comp, 0.50) as median,
+    quantile(total_comp, 0.75) as q3,
+    max(total_comp) as max
 from ${employee_data}
-where total_comp < 300000
+where job_level is not null
   and total_comp > 0
-  and job_level is not null
-group by all
-order by bin_start
+group by job_level
+order by median desc
 ```
 
-```sql histogram_top
+```sql cumulative_dist
+with ranked as (
+    select
+        total_comp,
+        row_number() over (order by total_comp) as row_num,
+        count(*) over () as total_count
+    from ${employee_data}
+    where total_comp > 0 and job_level is not null
+)
 select
-    floor(total_comp / 50000) * 50000 as bin_start,
-    count(*) as frequency
-from ${employee_data}
-where total_comp >= 300000
-  and job_level is not null
-group by all
-order by bin_start
+    total_comp as salary,
+    round(100.0 * row_num / total_count, 1) as percentile
+from ranked
+where row_num % greatest(1, total_count / 200) = 0  -- Sample ~200 points for smooth curve
+order by salary
 ```
 
 <div class="grid grid-cols-1 gap-4">
 
 <div class="card p-4">
-    <h3 class="text-lg font-bold mb-2">Distribución General (Plantilla Base)</h3>
-    <p class="text-sm text-gray-500 mb-4">Salarios hasta €300k (99% de empleados). Bins de €5k. Escala Logarítmica.</p>
-    <BarChart
-        data={histogram_main}
-        x=bin_start
-        y=frequency
-        title="Frecuencia por Nivel"
-        yLog=true
-        colorPalette={['#ec0000', '#2b2b2b', '#444444', '#555555', '#666666', '#777777', '#888888', '#999999', '#aaaaaa', '#bbbbbb', '#cccccc']}
+    <h3 class="text-lg font-bold mb-2">Box Plot: Distribución por Nivel Jerárquico</h3>
+    <p class="text-sm text-gray-500 mb-4">Muestra mediana, quartiles (Q1-Q3), y valores extremos por cada nivel.</p>
+    <BoxPlot
+        data={boxplot_data}
+        name=name
+        min=min
+        q1=q1
+        median=median
+        q3=q3
+        max=max
+        title="Retribución Total por Nivel"
+        yAxisTitle="Retribución (€)"
+        yFmt=eur0k
+        colorPalette={['#ec0000']}
     />
 </div>
 
 <div class="card p-4">
-    <h3 class="text-lg font-bold mb-2">Alta Dirección (Top Management)</h3>
-    <p class="text-sm text-gray-500 mb-4">Salarios > €300k. Bins de €50k.</p>
-    <BarChart
-        data={histogram_top}
-        x=bin_start
-        y=frequency
-        title="Frecuencia Alta Dirección"
-        yLog=true
-        colorPalette={['#ec0000', '#2b2b2b', '#444444', '#555555', '#666666', '#777777', '#888888', '#999999', '#aaaaaa', '#bbbbbb', '#cccccc']}
+    <h3 class="text-lg font-bold mb-2">Distribución Acumulada</h3>
+    <p class="text-sm text-gray-500 mb-4">Muestra qué porcentaje de empleados gana menos de cada umbral salarial.</p>
+    <LineChart
+        data={cumulative_dist}
+        x=salary
+        y=percentile
+        title="Curva de Distribución Acumulada"
+        xAxisTitle="Retribución Total (€)"
+        yAxisTitle="Percentil (%)"
+        xFmt=eur0k
+        colorPalette={['#ec0000']}
     />
 </div>
 
