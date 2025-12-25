@@ -16,7 +16,7 @@ select
     employee_id,
     job_level,
     sum(final_payout_eur) as total_comp
-from tia_elena.remuneration
+from tia_elena.remuneration_lean
 group by employee_id, job_level
 ```
 
