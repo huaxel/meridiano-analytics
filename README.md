@@ -15,7 +15,23 @@ Plataforma de inteligencia de negocio para el procesamiento y visualización de 
     - **Backend**: ETL en Python con Polars (0.13s para 300k registros).
     - **Frontend**: DuckDB-WASM en navegador con pre-agregación para filtrado instantáneo.
 
-## Arquitectura
+## 🚀 Guía de Inicio Rápido (Para No Técnicos)
+
+Hemos creado scripts automáticos para que no tengas que usar la terminal.
+
+### 🍎 Mac / Linux
+1. Asegúrate de tener **Python** y **Node.js** instalados.
+2. Haz doble clic (o ejecuta en terminal) el archivo:
+   `./iniciar_panel.sh`
+
+### 🪟 Windows
+1. Asegúrate de tener **Python** y **Node.js** instalados.
+2. Haz doble clic en el archivo:
+   `iniciar_panel.bat`
+
+El sistema instalará todo automáticamente y abrirá el panel en tu navegador.
+
+## 🛠️ Arquitectura Técnica
 
 1.  **ETL (Python)**: Genera datos sintéticos complejos (MRTs, diferidos, FX) y los exporta a Parquet.
 2.  **Modelado (DuckDB)**: Ingesta los archivos Parquet como fuente de datos.
