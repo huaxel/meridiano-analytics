@@ -55,7 +55,6 @@ order by bin_start
         x=bin_start
         y=frequency
         series=job_level
-        stacked=true
         title="Frecuencia por Nivel"
         yLog=true
         colorPalette={['#ec0000', '#2b2b2b', '#444444', '#555555', '#666666', '#777777', '#888888', '#999999', '#aaaaaa', '#bbbbbb', '#cccccc']}
@@ -70,7 +69,6 @@ order by bin_start
         x=bin_start
         y=frequency
         series=job_level
-        stacked=true
         title="Frecuencia Alta Dirección"
         yLog=true
         colorPalette={['#ec0000', '#2b2b2b', '#444444', '#555555', '#666666', '#777777', '#888888', '#999999', '#aaaaaa', '#bbbbbb', '#cccccc']}
