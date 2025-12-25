@@ -1,4 +1,4 @@
-# Banco Meridiano Analytics 🦁
+# Banco Meridiano Analytics 
 
 **Sistema de Análisis de Retribución Variable**
 
@@ -6,7 +6,7 @@ Plataforma de inteligencia de negocio para el procesamiento y visualización de 
 
 ![Badge](https://img.shields.io/badge/Status-Deployed-success) ![Stack](https://img.shields.io/badge/Stack-Evidence%20%7C%20DuckDB%20%7C%20Polars-blue)
 
-## 🚀 Características Clave
+##  Características Clave
 
 - **Modern Dashboard**: Construido con [Evidence.dev](https://evidence.dev/) (Markdown + SQL + Svelte).
 - **Interactive**: Filtros por filial, gráficos de correlación y KPIs reactivos pre-agregados.
@@ -23,7 +23,7 @@ Plataforma de inteligencia de negocio para el procesamiento y visualización de 
     - `index.md`: Panel Ejecutivo con filtros globales.
     - `analisis-salarial.md`: Desglose detallado por niveles y distribuciones.
 
-## 📦 Instalación
+##  Instalación
 
 ### Requisitos
 - Python 3.11+ (con `uv` recomendado)
