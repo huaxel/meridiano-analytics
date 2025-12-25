@@ -13,4 +13,18 @@
 
 <EvidenceDefaultLayout {data} logo="{base}/meridiano.jpg">
     <slot slot="content" />
+
+    <div
+        slot="footer"
+        class="mt-12 py-6 border-t border-gray-200 text-center text-xs text-gray-400 font-mono"
+    >
+        <p>© 2024 Banco Meridiano de Inversión S.A.</p>
+        <p>
+            Departamento de Remuneraciones | Última actualización: {new Date().toLocaleDateString()}
+        </p>
+        <div class="mt-2 flex justify-center gap-4 opacity-50">
+            <span>Confidencial</span>
+            <span>Uso Interno</span>
+        </div>
+    </div>
 </EvidenceDefaultLayout>
