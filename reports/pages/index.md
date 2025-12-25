@@ -15,7 +15,7 @@ title: Panel de Control
 </div>
 
 ```sql subsidiaries
-select distinct subsidiary_code from tia_elena.remuneration_summary where subsidiary_code != 'All' order by 1
+select distinct subsidiary_code from meridiano_analysis.remuneration_summary where subsidiary_code != 'All' order by 1
 ```
 
 ```sql kpis
@@ -24,7 +24,7 @@ select
     sum(paid) as total_paid,
     1 - (sum(paid) / sum(theoretical)) as haircut,
     sum(recs) as records
-from tia_elena.remuneration_summary
+from meridiano_analysis.remuneration_summary
 where (subsidiary_code = '${inputs.subsidiary.value}' or (subsidiary_code = 'All' and '${inputs.subsidiary.value}' = 'All'))
   and ('${inputs.subsidiary.value}' != 'All' OR subsidiary_code = 'All') 
   -- Logic: If Dropdown=Specific, match Specific. If Dropdown=All, match the 'All' row we created.
@@ -109,7 +109,7 @@ select
     sum(theoretical) as demand,
     sum(paid) as paid,
     sum(theoretical) - sum(paid) as gap
-from tia_elena.remuneration_summary
+from meridiano_analysis.remuneration_summary
 where subsidiary_code != 'All' 
   and (subsidiary_code = '${inputs.subsidiary.value}' or '${inputs.subsidiary.value}' = 'All')
 group by subsidiary_code
@@ -130,7 +130,7 @@ limit 10
 select
     category_normalized,
     sum(paid) as paid
-from tia_elena.remuneration_summary
+from meridiano_analysis.remuneration_summary
 where category_normalized is not null
   and (subsidiary_code = '${inputs.subsidiary.value}' or (subsidiary_code = 'All' and '${inputs.subsidiary.value}' = 'All'))
   and ('${inputs.subsidiary.value}' != 'All' OR subsidiary_code = 'All')
@@ -153,17 +153,19 @@ order by paid desc
     <ECharts config={{
         tooltip: {
             trigger: 'item',
-            formatter: '{b}: {c} ({d}%)' // Shows Name: Value (Percent%)
+            formatter: '{b}: {c} ({d}%)'
         },
         legend: {
-            top: '5%',
-            left: 'center'
+            bottom: 0,
+            left: 'center',
+            type: 'scroll' 
         },
         series: [
             {
                 name: 'Masa Salarial',
                 type: 'pie',
-                radius: ['40%', '70%'],
+                radius: ['45%', '75%'],
+                center: ['50%', '45%'], 
                 avoidLabelOverlap: false,
                 itemStyle: {
                     borderRadius: 10,
