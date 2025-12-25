@@ -75,6 +75,44 @@ order by bin_start
 
 </div>
 
+
+## Correlación: Nivel vs Retribución
+
+Análisis de la progresión salarial según nivel jerárquico. Permite identificar anomalías (puntos fuera de la tendencia).
+
+```sql scatter_data
+select
+    job_level,
+    CASE 
+        WHEN job_level = 'VP' THEN 6
+        WHEN job_level = 'D' THEN 5
+        WHEN job_level = 'M' THEN 4
+        WHEN job_level = 'S' THEN 3
+        WHEN job_level = 'A' THEN 2
+        WHEN job_level = 'J' THEN 1
+        ELSE 0 
+    END as level_code,
+    sum(final_payout_eur) as total_comp,
+    first(subsidiary_code) as subsidiary
+from tia_elena.remuneration
+where total_comp > 0
+group by employee_id, job_level
+order by level_code
+```
+
+<ScatterPlot
+    data={scatter_data}
+    x=level_code
+    y=total_comp
+    series=subsidiary
+    title="Correlación Nivel / Pago"
+    subtitle="Escala Numérica: J=1 ... VP=6"
+    xAxisTitle="Nivel Jerárquico (Calculado)"
+    yAxisTitle="Retribución Total (€)"
+    yLog=true
+    opacity=0.6
+/>
+
 ## Debug: Top Salarios
 ```sql debug_salaries
 select
