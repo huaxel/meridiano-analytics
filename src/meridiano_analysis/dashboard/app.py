@@ -1,7 +1,7 @@
 """
 Streamlit Dashboard Entry Point.
 
-Run with: streamlit run src/tia_elena/dashboard/app.py
+Run with: streamlit run src/meridiano_analysis/dashboard/app.py
 Or via CLI: tia-elena dashboard
 """
 import sys
@@ -17,9 +17,9 @@ import polars as pl
 import plotly.express as px
 import plotly.graph_objects as go
 
-from tia_elena.dashboard.theme import PAGE_CSS, HEADER_HTML, COLORS, CHART_COLORS, SUBSIDIARY_NAMES
-from tia_elena.dashboard.charts import create_pool_impact_chart, create_category_donut
-from tia_elena.dashboard.data import load_processed_data, load_audit_data
+from meridiano_analysis.dashboard.theme import PAGE_CSS, HEADER_HTML, COLORS, CHART_COLORS, SUBSIDIARY_NAMES
+from meridiano_analysis.dashboard.charts import create_pool_impact_chart, create_category_donut
+from meridiano_analysis.dashboard.data import load_processed_data, load_audit_data
 
 
 def get_region(sub_code: str) -> str:
@@ -140,7 +140,7 @@ def main():
 
         with tab2:
             st.subheader("📈 Distribución Salarial")
-            from tia_elena.dashboard.charts import create_salary_distribution_chart, create_box_plot_by_level
+            from meridiano_analysis.dashboard.charts import create_salary_distribution_chart, create_box_plot_by_level
             
             col1, col2 = st.columns(2)
             

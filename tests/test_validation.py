@@ -2,7 +2,7 @@
 Tests for validation module.
 """
 import polars as pl
-from tia_elena.validation import validate_remuneration_input, validate_fx_rates
+from meridiano_analysis.validation import validate_remuneration_input, validate_fx_rates
 
 
 def test_validate_valid_input():

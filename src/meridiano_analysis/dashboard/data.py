@@ -4,7 +4,7 @@ Data loading for dashboard.
 import streamlit as st
 import polars as pl
 
-from tia_elena.config import settings
+from meridiano_analysis.config import settings
 
 
 @st.cache_data

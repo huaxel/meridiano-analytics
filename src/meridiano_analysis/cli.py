@@ -7,8 +7,8 @@ from pathlib import Path
 
 def generate():
     """Generate synthetic data."""
-    from tia_elena.generators import generate_employees, generate_remuneration, generate_dimension_tables
-    from tia_elena.config import settings
+    from meridiano_analysis.generators import generate_employees, generate_remuneration, generate_dimension_tables
+    from meridiano_analysis.config import settings
     
     print("=" * 60)
     print("Banco Meridiano: Data Generation")
@@ -39,7 +39,7 @@ def generate():
 
 def etl():
     """Run ETL pipeline."""
-    from tia_elena import run_pipeline
+    from meridiano_analysis import run_pipeline
     
     print("=" * 60)
     print("tia-elena: ETL Pipeline")
@@ -63,7 +63,7 @@ def dashboard():
 def main():
     """Main CLI entry point."""
     if len(sys.argv) < 2:
-        print("Usage: tia-elena <command>")
+        print("Usage: meridiano-analysis <command>")
         print("Commands: generate, etl, dashboard")
         sys.exit(1)
     

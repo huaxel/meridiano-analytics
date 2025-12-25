@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     """Application settings with sensible defaults."""
     
     model_config = SettingsConfigDict(
-        env_prefix="TIAELENA_",
+        env_prefix="MERIDIANO_",
         env_file=".env",
         extra="ignore"
     )

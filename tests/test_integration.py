@@ -3,11 +3,11 @@ import polars as pl
 from pathlib import Path
 from unittest.mock import patch
 
-from tia_elena.generators.remuneration import generate_remuneration
-from tia_elena.generators.employees import generate_employees
-from tia_elena.generators.dimensions import generate_fx_rates, generate_mapping, generate_bonus_pool
-from tia_elena.pipeline import ETLPipeline
-from tia_elena.exporters import DataExporterFactory
+from meridiano_analysis.generators.remuneration import generate_remuneration
+from meridiano_analysis.generators.employees import generate_employees
+from meridiano_analysis.generators.dimensions import generate_fx_rates, generate_mapping, generate_bonus_pool
+from meridiano_analysis.pipeline import ETLPipeline
+from meridiano_analysis.exporters import DataExporterFactory
 
 @pytest.fixture
 def temp_data_dir(tmp_path):
@@ -36,8 +36,8 @@ def test_pipeline_end_to_end(temp_data_dir):
     }
     
     # Patch SUBSIDIARIES in both modules where it is imported
-    with patch("tia_elena.generators.employees.SUBSIDIARIES", TEST_SUBSIDIARIES), \
-         patch("tia_elena.generators.remuneration.SUBSIDIARIES", TEST_SUBSIDIARIES):
+    with patch("meridiano_analysis.generators.employees.SUBSIDIARIES", TEST_SUBSIDIARIES), \
+         patch("meridiano_analysis.generators.remuneration.SUBSIDIARIES", TEST_SUBSIDIARIES):
         
         # 1. Generate minimal data
         employees_df = generate_employees() # No count arg

@@ -5,7 +5,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 import pandas as pd
 
-from tia_elena.dashboard.theme import COLORS, CHART_COLORS
+from meridiano_analysis.dashboard.theme import COLORS, CHART_COLORS
 
 
 def create_pool_impact_chart(df: pd.DataFrame, title: str = "Top 10 Déficit") -> go.Figure:

@@ -50,7 +50,8 @@ if not exist "node_modules" (
 REM 6. Generar Datos
 echo ⚙️  Procesando datos actualizados...
 cd ..
-python -m tia_elena.cli etl --rows 10000
+set PYTHONPATH=%PYTHONPATH%;%CD%\src
+python -m meridiano_analysis.cli etl --rows 10000
 
 REM 7. Generar Fuentes de Evidence
 cd reports

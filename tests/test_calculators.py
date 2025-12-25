@@ -2,7 +2,7 @@
 Tests for calculator classes.
 """
 import polars as pl
-from tia_elena.calculators import FundingRatioCalculator
+from meridiano_analysis.calculators import FundingRatioCalculator
 
 
 def test_funding_ratio_underfunded(sample_pool_df):

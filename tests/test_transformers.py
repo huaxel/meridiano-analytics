@@ -2,7 +2,7 @@
 Tests for transformer functions.
 """
 import polars as pl
-from tia_elena.transformers import explode_concepts, enrich_with_fx, enrich_with_mapping
+from meridiano_analysis.transformers import explode_concepts, enrich_with_fx, enrich_with_mapping
 
 
 def test_explode_concepts_single(sample_remuneration_df):

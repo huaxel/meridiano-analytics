@@ -49,11 +49,12 @@ fi
 echo "⚙️  Procesando datos actualizados..."
 cd .. # Volver a raiz para ejecutar modulo
 # Asegurar que el modulo existe
-if [ -d "tia_elena" ]; then
+export PYTHONPATH=$PYTHONPATH:$(pwd)/src
+if [ -d "src/meridiano_analysis" ]; then
     # Ejecutar ETL silenciosamente (o mostrar output si falla)
-    python -m tia_elena.cli etl --rows 10000 || echo "⚠️  Aviso: ETL reportó warning, continuando..."
+    python -m meridiano_analysis.cli etl --rows 10000 || echo "⚠️  Aviso: ETL reportó warning, continuando..."
 else
-    echo "⚠️  No se encontró módulo ETL (tia_elena), usando datos cacheados."
+    echo "⚠️  No se encontró módulo ETL (meridiano_analysis), usando datos cacheados."
 fi
 
 # 7. Generar Fuentes de Evidence
