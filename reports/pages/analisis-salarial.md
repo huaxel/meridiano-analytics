@@ -54,10 +54,9 @@ order by bin_start
         data={histogram_main}
         x=bin_start
         y=frequency
-        series=job_level
         title="Frecuencia por Nivel"
         yLog=true
-        stacked=false
+        type=grouped
         colorPalette={['#ec0000', '#2b2b2b', '#444444', '#555555', '#666666', '#777777', '#888888', '#999999', '#aaaaaa', '#bbbbbb', '#cccccc']}
     />
 </div>
@@ -69,10 +68,9 @@ order by bin_start
         data={histogram_top}
         x=bin_start
         y=frequency
-        series=job_level
         title="Frecuencia Alta Dirección"
         yLog=true
-        stacked=false
+        type=grouped
         colorPalette={['#ec0000', '#2b2b2b', '#444444', '#555555', '#666666', '#777777', '#888888', '#999999', '#aaaaaa', '#bbbbbb', '#cccccc']}
     />
 </div>

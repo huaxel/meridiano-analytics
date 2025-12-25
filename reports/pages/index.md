@@ -80,6 +80,7 @@ where (subsidiary_code = '${inputs.subsidiary.value}' or (subsidiary_code = 'All
 />
 
 
+{#if impact.length > 0}
 <Alert status=warning>
   <div class="flex items-center gap-2">
     <strong>Resumen Ejecutivo:</strong>
@@ -96,6 +97,7 @@ where (subsidiary_code = '${inputs.subsidiary.value}' or (subsidiary_code = 'All
     </a>
   </div>
 </Alert>
+{/if}
 
 ---
 
