@@ -16,7 +16,7 @@ select
     employee_id,
     job_level,
     sum(final_payout_eur) as total_comp
-from tia_elena.remuneration_lean
+from meridiano_analysis.remuneration_lean
 group by employee_id, job_level
 ```
 
@@ -28,6 +28,7 @@ select
 from ${employee_data}
 where total_comp < 300000
   and total_comp > 0
+  and job_level is not null
 group by all
 order by bin_start
 ```
@@ -39,6 +40,7 @@ select
     count(*) as frequency
 from ${employee_data}
 where total_comp >= 300000
+  and job_level is not null
 group by all
 order by bin_start
 ```
@@ -47,7 +49,7 @@ order by bin_start
 
 <div class="card p-4">
     <h3 class="text-lg font-bold mb-2">Distribución General (Plantilla Base)</h3>
-    <p class="text-sm text-gray-500 mb-4">Salarios hasta €300k (99% de empleados). Bins de €5k.</p>
+    <p class="text-sm text-gray-500 mb-4">Salarios hasta €300k (99% de empleados). Bins de €5k. Escala Logarítmica.</p>
     <BarChart
         data={histogram_main}
         x=bin_start
@@ -55,6 +57,7 @@ order by bin_start
         series=job_level
         stacked=true
         title="Frecuencia por Nivel"
+        yLog=true
         colorPalette={['#ec0000', '#2b2b2b', '#444444', '#555555', '#666666', '#777777', '#888888', '#999999', '#aaaaaa', '#bbbbbb', '#cccccc']}
     />
 </div>
@@ -69,6 +72,7 @@ order by bin_start
         series=job_level
         stacked=true
         title="Frecuencia Alta Dirección"
+        yLog=true
         colorPalette={['#ec0000', '#2b2b2b', '#444444', '#555555', '#666666', '#777777', '#888888', '#999999', '#aaaaaa', '#bbbbbb', '#cccccc']}
     />
 </div>
@@ -84,17 +88,21 @@ Análisis de la progresión salarial según nivel jerárquico. Permite identific
 select
     job_level,
     CASE 
-        WHEN job_level = 'VP' THEN 6
-        WHEN job_level = 'D' THEN 5
-        WHEN job_level = 'M' THEN 4
-        WHEN job_level = 'S' THEN 3
-        WHEN job_level = 'A' THEN 2
-        WHEN job_level = 'J' THEN 1
+        WHEN job_level LIKE 'L9%' THEN 9
+        WHEN job_level LIKE 'L8%' THEN 8
+        WHEN job_level LIKE 'L7%' THEN 7
+        WHEN job_level LIKE 'L6%' THEN 6
+        WHEN job_level LIKE 'L5%' THEN 5
+        WHEN job_level LIKE 'L4%' THEN 4
+        WHEN job_level LIKE 'L3%' THEN 3
+        WHEN job_level LIKE 'L2%' THEN 2
+        WHEN job_level LIKE 'L1%' THEN 1
         ELSE 0 
     END as level_code,
     sum(final_payout_eur) as total_comp,
     first(subsidiary_code) as subsidiary
-from tia_elena.remuneration_lean
+from meridiano_analysis.remuneration_lean
+where job_level is not null
 group by employee_id, job_level
 having sum(final_payout_eur) > 0
 order by level_code
@@ -106,8 +114,8 @@ order by level_code
     y=total_comp
     series=subsidiary
     title="Correlación Nivel / Pago"
-    subtitle="Escala Numérica: J=1 ... VP=6"
-    xAxisTitle="Nivel Jerárquico (Calculado)"
+    subtitle="Escala Numérica: L1=1 ... L9=9"
+    xAxisTitle="Nivel Jerárquico"
     yAxisTitle="Retribución Total (€)"
     yLog=true
     opacity=0.6
@@ -119,7 +127,7 @@ select
     employee_id,
     job_level,
     sum(final_payout_eur) as total_comp
-from tia_elena.remuneration_lean
+from meridiano_analysis.remuneration_lean
 group by employee_id, job_level
 order by total_comp desc
 limit 20
@@ -140,7 +148,7 @@ select
     quantile(final_payout_eur, 0.75) as q3,
     min(final_payout_eur) as min_val,
     max(final_payout_eur) as max_val -- Note: Evidence BoxPlot might need specific format, using table for detail
-from tia_elena.remuneration_lean
+from meridiano_analysis.remuneration_lean
 group by job_level
 order by median desc
 ```
