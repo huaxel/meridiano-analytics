@@ -10,3 +10,5 @@ plugins:
     "@evidence-dev/duckdb": {}
   components:
     "@evidence-dev/core-components": {}
+deployment:
+  basePath: /meridiano-analytics

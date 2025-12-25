@@ -97,9 +97,12 @@ group by category_normalized
 order by paid desc
 ```
 
-<DataTable
+<DonutChart
     data={categories}
-    title="Masa Salarial por Concepto"
-    rows=10
+    category=category_normalized
+    value=paid
+    title="Distribución de Masa Salarial"
+    fmt=eur
+    colors={['#ec0000', '#2b2b2b', '#444444', '#555555', '#666666', '#777777', '#888888', '#999999', '#aaaaaa', '#bbbbbb']}
 />
 
