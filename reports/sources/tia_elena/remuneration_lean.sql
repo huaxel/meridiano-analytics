@@ -3,4 +3,4 @@ select
     job_level,
     final_payout_eur,
     subsidiary_code
-from '../../raw_data/remuneration.parquet'
+from './raw_data/remuneration.parquet'
