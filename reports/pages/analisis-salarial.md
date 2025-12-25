@@ -23,11 +23,11 @@ group by employee_id, job_level
 ```sql boxplot_data
 select
     job_level as name,
-    min(total_comp) as min,
+    quantile(total_comp, 0.01) as min,
     quantile(total_comp, 0.25) as q1,
     quantile(total_comp, 0.50) as median,
     quantile(total_comp, 0.75) as q3,
-    max(total_comp) as max
+    quantile(total_comp, 0.99) as max
 from ${employee_data}
 where job_level is not null
   and total_comp > 0
@@ -36,19 +36,14 @@ order by median desc
 ```
 
 ```sql cumulative_dist
-with ranked as (
-    select
-        total_comp,
-        row_number() over (order by total_comp) as row_num,
-        count(*) over () as total_count
-    from ${employee_data}
-    where total_comp > 0 and job_level is not null
-)
 select
     total_comp as salary,
-    round(100.0 * row_num / total_count, 1) as percentile
-from ranked
-where row_num % greatest(1, total_count / 200) = 0  -- Sample ~200 points for smooth curve
+    round(percent_rank() over (order by total_comp) * 100, 1) as percentile
+from ${employee_data}
+where total_comp > 0 
+  and total_comp < 500000
+  and job_level is not null
+qualify row_number() over (partition by floor(total_comp / 2500) order by total_comp) = 1
 order by salary
 ```
 
@@ -79,10 +74,11 @@ order by salary
         data={cumulative_dist}
         x=salary
         y=percentile
-        title="Curva de Distribución Acumulada"
+        title="Curva de Distribución Acumulada (hasta €500k)"
         xAxisTitle="Retribución Total (€)"
         yAxisTitle="Percentil (%)"
         xFmt=eur0k
+        xMax=500000
         colorPalette={['#ec0000']}
     />
 </div>
