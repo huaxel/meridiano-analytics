@@ -20,66 +20,49 @@ from meridiano_analysis.remuneration_lean
 group by employee_id, job_level
 ```
 
-```sql boxplot_data
+```sql salary_ranges
 select
-    job_level as name,
-    quantile(total_comp, 0.01) as min,
-    quantile(total_comp, 0.25) as q1,
-    quantile(total_comp, 0.50) as median,
-    quantile(total_comp, 0.75) as q3,
-    quantile(total_comp, 0.99) as max
+    job_level,
+    'Q1 (25%)' as metric,
+    quantile(total_comp, 0.25) as value
 from ${employee_data}
-where job_level is not null
-  and total_comp > 0
+where job_level is not null and total_comp > 0
 group by job_level
-order by median desc
-```
-
-```sql cumulative_dist
+union all
 select
-    total_comp as salary,
-    round(percent_rank() over (order by total_comp) * 100, 1) as percentile
+    job_level,
+    'Mediana (50%)' as metric,
+    quantile(total_comp, 0.50) as value
 from ${employee_data}
-where total_comp > 0 
-  and total_comp < 500000
-  and job_level is not null
-qualify row_number() over (partition by floor(total_comp / 2500) order by total_comp) = 1
-order by salary
+where job_level is not null and total_comp > 0
+group by job_level
+union all
+select
+    job_level,
+    'Q3 (75%)' as metric,
+    quantile(total_comp, 0.75) as value
+from ${employee_data}
+where job_level is not null and total_comp > 0
+group by job_level
+order by job_level, metric
 ```
 
 <div class="grid grid-cols-1 gap-4">
 
 <div class="card p-4">
-    <h3 class="text-lg font-bold mb-2">Box Plot: Distribución por Nivel Jerárquico</h3>
-    <p class="text-sm text-gray-500 mb-4">Muestra mediana, quartiles (Q1-Q3), y valores extremos por cada nivel.</p>
-    <BoxPlot
-        data={boxplot_data}
-        name=name
-        min=min
-        q1=q1
-        median=median
-        q3=q3
-        max=max
-        title="Retribución Total por Nivel"
+    <h3 class="text-lg font-bold mb-2">Distribución Salarial por Nivel</h3>
+    <p class="text-sm text-gray-500 mb-4">Q1, Mediana y Q3 de retribución total por nivel jerárquico.</p>
+    <BarChart
+        data={salary_ranges}
+        x=job_level
+        y=value
+        series=metric
+        type=grouped
+        title="Quartiles de Retribución por Nivel"
+        xAxisTitle="Nivel Jerárquico"
         yAxisTitle="Retribución (€)"
         yFmt=eur0k
-        colorPalette={['#ec0000']}
-    />
-</div>
-
-<div class="card p-4">
-    <h3 class="text-lg font-bold mb-2">Distribución Acumulada</h3>
-    <p class="text-sm text-gray-500 mb-4">Muestra qué porcentaje de empleados gana menos de cada umbral salarial.</p>
-    <LineChart
-        data={cumulative_dist}
-        x=salary
-        y=percentile
-        title="Curva de Distribución Acumulada (hasta €500k)"
-        xAxisTitle="Retribución Total (€)"
-        yAxisTitle="Percentil (%)"
-        xFmt=eur0k
-        xMax=500000
-        colorPalette={['#ec0000']}
+        colorPalette={['#ec0000', '#666666', '#cccccc']}
     />
 </div>
 
@@ -153,19 +136,18 @@ select
     quantile(final_payout_eur, 0.50) as median,
     quantile(final_payout_eur, 0.75) as q3,
     min(final_payout_eur) as min_val,
-    max(final_payout_eur) as max_val -- Note: Evidence BoxPlot might need specific format, using table for detail
+    max(final_payout_eur) as max_val
 from meridiano_analysis.remuneration_lean
 group by job_level
 order by median desc
 ```
 
-<DataTable data={boxplot} title="Estadísticas por Nivel">
+<DataTable data={boxplot} title="Estadísticas Detalladas por Nivel">
   <Column id=job_level title="Nivel" />
   <Column id=min_val title="Mínimo" fmt=eur />
   <Column id=q1 title="Q1 (25%)" fmt=eur />
   <Column id=median title="Mediana" fmt=eur />
   <Column id=q3 title="Q3 (75%)" fmt=eur />
-  <Column id=max_val title="Máximo" fmt=eur />
   <Column id=max_val title="Máximo" fmt=eur />
 </DataTable>
 
