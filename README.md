@@ -54,7 +54,7 @@ pip install -e .
 
 # 2. Generar datos (Pipeline ETL)
 tia-elena generate
-tia-elena etl  # Crea los archivos Parquet en reports/sources/tia_elena/
+meridiano-analysis etl  # Crea los archivos Parquet en reports/sources/meridiano_analysis/
 
 # 3. Instalar frontend
 cd reports
